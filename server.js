@@ -16,6 +16,10 @@ app.use(function(request,response,next){
     next();
 })
 
+//GET
+app.get('/api/message', GetMessages);
+
+//POST
 app.post('/api/message', function(request,response){
     console.log(request.body);
 
@@ -25,9 +29,9 @@ app.post('/api/message', function(request,response){
     response.status(200);
 })
 
-function GetMessages(){
+function GetMessages(request,response){
     Message.find({}).exec(function(error,result){
-        console.log(result);
+        response.send(result);
     })
 }
 
@@ -35,7 +39,6 @@ function GetMessages(){
 mongoose.connect('mongodb://localhost:27017/test', function(error,db){
     if(!error){
         console.log('we are connected to mongo');
-        GetMessages();
     }
 })
 
