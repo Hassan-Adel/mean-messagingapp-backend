@@ -2,7 +2,8 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-
+//Why bluebird: mpromise (mongoose's default promise library) is deprecated, plug in your own promise library instead:
+mongoose.Promise = require('bluebird');
 
 
 //Controllers
