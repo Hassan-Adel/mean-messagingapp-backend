@@ -36,5 +36,5 @@ function createTokken(user){
         iat:momnet().unix,                      //Issued  At Time
         exp: moment().add(14, 'days').unix()
     };
-retrn jwt.encode(payload,'secret');
+return jwt.encode(payload,'secret');
 }
