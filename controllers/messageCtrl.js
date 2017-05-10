@@ -3,7 +3,7 @@ var Message = require('../models/message');
 
 module.exports = {
     get: function (request, response) {
-        Message.find({}).exec(function (error, result) {
+        Message.find({}).populate('user','-pwd').exec(function (error, result) {
             response.send(result);
         })
     },
