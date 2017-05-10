@@ -24,13 +24,13 @@ module.exports = {
                         message: error.message
                     });
                 }
-                response.status(200).send({tokken: createTokken(result)});
+                response.status(200).send({token: createToken(result)});
             })
         });
     }
 }
 
-function createTokken(user){
+function createToken(user){
     var payload={
         sub:user._id,
         iat:moment().unix,                      //Issued  At Time
