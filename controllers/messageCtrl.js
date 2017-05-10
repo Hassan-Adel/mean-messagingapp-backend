@@ -8,8 +8,10 @@ module.exports = {
         })
     },
     post: function (request, response) {
-        Message.find({}).exec(function (error, result) {
-            response.send(result);
-        })
+        console.log(request.body, request.user);
+        request.body.user = request.user;
+        var message = new Message(request.body);
+        message.save();
+        response.status(200);
     }
 }
