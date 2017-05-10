@@ -1,5 +1,7 @@
 //Models
 var User = require('../models/user');
+var jwt = require('jwt-simple');
+var momnet = require('moment')
 
 module.exports = {
     register: function (request, response) {
@@ -22,8 +24,17 @@ module.exports = {
                         message: error.message
                     });
                 }
-                response.status(200);
+                response.status(200).send({tokken: createTokken(result)});
             })
         });
     }
+}
+
+function createTokken(user){
+    var payload={
+        sub:user._id,
+        iat:momnet().unix,                      //Issued  At Time
+        exp: moment().add(14, 'days').unix()
+    };
+retrn jwt.encode(payload,'secret');
 }
