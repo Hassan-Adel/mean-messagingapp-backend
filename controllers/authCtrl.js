@@ -1,40 +1,63 @@
-//Models
 var User = require('../models/user');
 var jwt = require('jwt-simple');
-var moment = require('moment')
+var moment = require('moment');
 
 module.exports = {
-    register: function (request, response) {
-        console.log(request.body);
+    register: function (req, res) {
+        console.log(req.body);
 
         User.findOne({
-            email: request.body.email
-        }, function (error, existingUser) {
+            email: req.body.email
+        }, function (err, existingUser) {
 
             if (existingUser)
-                return response.status(409).send({
+                return res.status(409).send({
                     message: 'Email is already registered'
                 });
 
-            var user = new User(request.body);
+            var user = new User(req.body);
 
-            user.save(function (error, result) {
-                if (error) {
-                    response.status(500).send({
-                        message: error.message
+            user.save(function (err, result) {
+                if (err) {
+                    res.status(500).send({
+                        message: err.message
                     });
                 }
-                response.status(200).send({token: createToken(result)});
+                res.status(200).send({
+                    token: createToken(result)
+                });
             })
+        });
+    },
+    login: function (req, res) {
+        User.findOne({
+            email: req.body.email
+        }, function (err, user) {
+
+            if (!user)
+                return res.status(401).send({
+                    message: 'Email or Password invalid'
+                });
+
+            if (req.body.pwd == user.pwd) {
+                console.log(req.body, user.pwd)
+                res.send({
+                    token: createToken(user)
+                });
+            } else {
+                return res.status(401).send({
+                    message: 'Invalid email and/or password'
+                });
+            }
         });
     }
 }
 
-function createToken(user){
-    var payload={
-        sub:user._id,
-        iat:moment().unix,                      //Issued  At Time
+function createToken(user) {
+    var payload = {
+        sub: user._id,
+        iat: moment().unix(),
         exp: moment().add(14, 'days').unix()
     };
-return jwt.encode(payload,'secret');
+    return jwt.encode(payload, 'secret');
 }

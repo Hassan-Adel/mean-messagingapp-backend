@@ -25,6 +25,9 @@ app.use(cors)
 //POST
 app.post('/authentication/register', auth.register);
 
+//POST
+app.post('/authentication/login', auth.login);
+
 //GET
 app.get('/api/message', message.get);
 
